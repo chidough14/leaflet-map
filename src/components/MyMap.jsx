@@ -6,8 +6,10 @@ import './MyMap.css'
 
 export class MyMap extends Component {
     state = {
-
+        color: '#e3d3d3'
     }
+
+    color = ['green', 'red','yellow', 'pink', 'blue']
 
     componentDidMount () {
         console.log(mapData)
@@ -27,14 +29,25 @@ export class MyMap extends Component {
     changeCountryColor = (event) => {
         event.target.setStyle({
             color: 'green',
-            fillColor: 'yellow',
-            fillOpacity: 0.5
+            fillColor: this.state.color,
+            fillOpacity: 1
+        })
+    }
+
+    colorChange = (event) => {
+        this.setState({
+            color: event.target.value
         })
     }
 
     onEachCountry = (country, layer) => {
         const counyrtName = country.properties.ADMIN
         //console.log(country)
+        layer.options.fillOpacity = Math.random()
+
+        //const colorIndex = Math.floor(Math.random() * this.color.length)
+
+        //layer.options.fillColor = this.color[colorIndex]
 
         layer.bindPopup(counyrtName)
         layer.on({
@@ -49,6 +62,8 @@ export class MyMap extends Component {
                 <Map style={{ height: "80vh"}} zoom={2} center={[20, 100]} >
                     <GeoJSON style={this.countryStyle} data={mapData.features} onEachFeature={this.onEachCountry} />
                 </Map>
+
+                <input type="color" value={this.state.color} onChange={this.colorChange} />
             </div>
         )
     }
